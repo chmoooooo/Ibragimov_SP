@@ -1,3 +1,4 @@
+PYTHON!!!
 class Games:
     def __init__(self, developer, year, genre):
         self.developer = developer
@@ -41,3 +42,83 @@ bloodboorne = Bloodboorne("Hidetaka Babadzaki", "2015", "Soulslike", "Console")
 
 dark_souls.info()
 bloodboorne.info()
+
+
+
+
+
+C#!!!!!!!!!
+using System;
+
+class Games
+{
+    protected string developer;
+    protected string year;
+    protected string genre;
+
+    public Games(string developer, string year, string genre)
+    {
+        // Передача данных в поля базового класса
+        this.developer = developer;
+        this.year = year;
+        this.genre = genre;
+    }
+
+    public virtual void info()
+    {
+        Console.WriteLine($"Разработчик: {developer}");
+        Console.WriteLine($"Год выпуска: {year}");
+        Console.WriteLine($"Жанр: {genre}");
+    }
+}
+
+class Dark_Souls : Games
+{
+    private string difficulty;
+
+    public Dark_Souls(string developer, string year, string genre, string difficulty)
+        : base(developer, year, genre)  // Передача данных в конструктор родителя
+    {
+        this.difficulty = difficulty;
+    }
+
+    public override void info()
+    {
+        // Вывод данных из родительского класса
+        base.info();
+        // Вывод специфичного атрибута потомка
+        Console.WriteLine($"Сложность: {difficulty}");
+    }
+}
+
+class Bloodboorne : Games
+{
+    private string device;
+
+    public Bloodboorne(string developer, string year, string genre, string device)
+        : base(developer, year, genre)  // Передача данных в конструктор родителя
+    {
+        this.device = device;
+    }
+
+    public override void info()
+    {
+        // Вывод данных из родительского класса
+        base.info();
+        // Вывод специфичного атрибута потомка
+        Console.WriteLine($"Устройство: {device}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Dark_Souls dark_souls = new Dark_Souls("Hidetaka Babadzaki", "2011", "Soulslike", "Hard");
+        Bloodboorne bloodboorne = new Bloodboorne("Hidetaka Babadzaki", "2015", "Soulslike", "Console");
+
+        dark_souls.info();
+        Console.WriteLine();
+        bloodboorne.info();
+    }
+}
