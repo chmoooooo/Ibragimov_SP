@@ -1,0 +1,43 @@
+class Games:
+    def __init__(self, developer, year, genre):
+        self.developer = developer
+        self.year = year
+        self.genre = genre
+    
+    def info(self):
+        print(f"Разработчик: {self.developer}\n"
+              f"Год выпуска: {self.year}\n"
+              f"Жанр: {self.genre}")
+
+
+class Dark_Souls(Games):
+    def __init__(self, developer, year, genre, difficulty):
+        # Передача общих данных в родительский класс
+        super().__init__(developer, year, genre)
+        self.difficulty = difficulty
+    
+    def info(self):
+        # Вывод базовых данных из родителя
+        super().info()
+        # Вывод специфичного атрибута потомка
+        print(f"Сложность: {self.difficulty}")
+
+
+class Bloodboorne(Games):
+    def __init__(self, developer, year, genre, device):
+        # Передача общих данных в родительский класс
+        super().__init__(developer, year, genre)
+        self.device = device
+    
+    def info(self):
+        # Вывод базовых данных из родителя
+        super().info()
+        # Вывод специфичного атрибута потомка
+        print(f"Устройство: {self.device}")
+
+
+dark_souls = Dark_Souls("Hidetaka Babadzaki", "2011", "Soulslike", "Hard")
+bloodboorne = Bloodboorne("Hidetaka Babadzaki", "2015", "Soulslike", "Console")
+
+dark_souls.info()
+bloodboorne.info()
