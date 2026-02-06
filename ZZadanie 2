@@ -1,25 +1,24 @@
 PYTHON!!!
 class Games:
-    def __init__(self, developer, year, genre, platform=None):
+    def __init__(self, developer, year, genre):
         self.developer = developer
-        self.year = year
+        self.year = int(year)
         self.genre = genre
-        self.platform = platform
     
     def info(self):
         print(f"Разработчик: {self.developer}\n"
               f"Год выпуска: {self.year}\n"
               f"Жанр: {self.genre}")
-        if self.platform:
-            print(f"Платформа: {self.platform}")
     
-    def is_mobile(self):
-        return self.platform == "mobile"
+    def kogda_vishla_igra (self):
+        current_year = 2026  
+        age = current_year - self.year
+        print(f"Игра вышла {age} лет назад")
 
 
 class Clash_Royale(Games):
     def __init__(self, developer, year, genre, difficulty):
-        super().__init__(developer, year, genre, platform="mobile")
+        super().__init__(developer, year, genre)
         self.difficulty = difficulty
     
     def info(self):
@@ -29,7 +28,7 @@ class Clash_Royale(Games):
 
 class Bloodboorne(Games):
     def __init__(self, developer, year, genre, device):
-        super().__init__(developer, year, genre, platform=device)
+        super().__init__(developer, year, genre)
         self.device = device
     
     def info(self):
@@ -37,17 +36,20 @@ class Bloodboorne(Games):
         print(f"Устройство: {self.device}")
 
 
-# Создание объектов
-clash_royale = Clash_Royale("Supercell", "2016", "RTS", "Hard") 
-bloodboorne = Bloodboorne("FromSoftware", "2015", "Soulslike", "Console") 
 
-# Вывод информации
+clash_royale = Clash_Royale("Supercell", 2016, "RTS", "Средняя")
+bloodboorne = Bloodboorne("FromSoftware", 2015, "Soulslike", "PlayStation")
+
 clash_royale.info()
-print("Мобильная игра?", clash_royale.is_mobile())
-print()
-
+print()  
 bloodboorne.info()
-print("Мобильная игра?", bloodboorne.is_mobile())
+print()  
+
+print("Для Clash Royale:")
+clash_royale.kogda_vishla_igra()
+
+print("\nДля Bloodborne:")
+bloodboorne.kogda_vishla_igra()
 
 
 
