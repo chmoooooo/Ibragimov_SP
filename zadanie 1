@@ -11,8 +11,10 @@ print(list[3:7]) #Вывод элементов в диапазоне
 list.append(999) #Добавление нового элемента в конец списка
 print(list)
 
-list.insert(6,'center') #Добавление нового элемента в середину
-print(list)
+# Автоматическое определение середины и вставка "center"
+mid_index = len(lst) // 2
+lst.insert(mid_index, 'center')
+print(lst)
 
 print(list.count(8)) #Подсчитывание повторяющегося элемента
 
