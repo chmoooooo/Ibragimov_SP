@@ -1,47 +1,53 @@
 PYTHON!!!
 class Games:
-    def __init__(self, developer, year, genre):
+    def __init__(self, developer, year, genre, platform=None):
         self.developer = developer
         self.year = year
         self.genre = genre
+        self.platform = platform
     
     def info(self):
         print(f"Разработчик: {self.developer}\n"
               f"Год выпуска: {self.year}\n"
               f"Жанр: {self.genre}")
+        if self.platform:
+            print(f"Платформа: {self.platform}")
+    
+    def is_mobile(self):
+        return self.platform == "mobile"
 
 
-class Dark_Souls(Games):
+class Clash_Royale(Games):
     def __init__(self, developer, year, genre, difficulty):
-        # Передача общих данных в родительский класс
-        super().__init__(developer, year, genre)
+        super().__init__(developer, year, genre, platform="mobile")
         self.difficulty = difficulty
     
     def info(self):
-        # Вывод базовых данных из родителя
         super().info()
-        # Вывод специфичного атрибута потомка
         print(f"Сложность: {self.difficulty}")
 
 
 class Bloodboorne(Games):
     def __init__(self, developer, year, genre, device):
-        # Передача общих данных в родительский класс
-        super().__init__(developer, year, genre)
+        super().__init__(developer, year, genre, platform=device)
         self.device = device
     
     def info(self):
-        # Вывод базовых данных из родителя
         super().info()
-        # Вывод специфичного атрибута потомка
         print(f"Устройство: {self.device}")
 
 
-dark_souls = Dark_Souls("Hidetaka Babadzaki", "2011", "Soulslike", "Hard")
-bloodboorne = Bloodboorne("Hidetaka Babadzaki", "2015", "Soulslike", "Console")
+# Создание объектов
+clash_royale = Clash_Royale("Supercell", "2016", "RTS", "Hard") 
+bloodboorne = Bloodboorne("FromSoftware", "2015", "Soulslike", "Console") 
 
-dark_souls.info()
+# Вывод информации
+clash_royale.info()
+print("Мобильная игра?", clash_royale.is_mobile())
+print()
+
 bloodboorne.info()
+print("Мобильная игра?", bloodboorne.is_mobile())
 
 
 
