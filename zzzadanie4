@@ -1,0 +1,22 @@
+using System.Diagnostics;
+
+// Получаем все запущенные процессы
+foreach (Process process in Process.GetProcesses())
+{
+    // Выводим id и имя процесса
+    Console.WriteLine($"ID: {process.Id} Name: {process.ProcessName}");
+}
+
+// Получаем все потоки процесса VisualStudio
+Process proc = Process.GetProcessesByName("devenv")[0];
+
+ProcessThreadCollection processThreads = proc.Threads;
+
+foreach (ProcessThread thread in processThreads)
+{
+    Console.WriteLine($"ThreadId: {thread.Id}");
+}
+
+// ЗАпуск программ
+Process.Start(@"mspaint");
+Process.Start(@"C:\Program Files\Google\Chrome\Application\chrome");
