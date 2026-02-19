@@ -1,0 +1,63 @@
+using System;
+using Excel = Microsoft.Office.Interop.Excel; // Создаем псевдоним для библиотеки Excel
+
+namespace Excellll
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // СОЗДАНИЕ ЭКЗЕМПЛЯРА EXCEL
+            Excel.Application excelApp = new Excel.Application();
+
+            // ПРОВЕРКА УСТАНОВКИ EXCEL
+            if (excelApp == null)
+            {
+                Console.WriteLine("Excel isn't installed"); 
+                return; 
+            }
+
+            // ОТКРЫТИЕ ФАЙЛА EXCEL
+            Excel.Workbook excelbook = excelApp.Workbooks.Open(@"C:\Users\23_ИП-291к\Desktop\rabota.xlsx");
+
+            // ПОЛУЧЕНИЕ РАБОЧЕГО ЛИСТА
+            Excel._Worksheet excelSheet = (Excel._Worksheet)excelbook.Sheets[2];
+
+            // ПОЛУЧЕНИЕ ИСПОЛЬЗУЕМОГО ДИАПАЗОНА
+            // UsedRange - все ячейки, которые содержат данные
+            Excel.Range excelRange = excelSheet.UsedRange;
+
+            // ОПРЕДЕЛЕНИЕ РАЗМЕРА ТАБЛИЦЫ
+            int rows = excelRange.Rows.Count;
+            int cols = excelRange.Columns.Count;
+
+            // ЧТЕНИЕ ДАННЫХ ИЗ EXCEL
+            // Столбцы
+            for (int i = 1; i <= rows; i++)
+            {
+                Console.Write("\r\n"); 
+
+                // Строки
+                for (int j = 1; j <= cols; j++)
+                {
+                    // ПОЛУЧЕНИЕ ЗНАЧЕНИЯ ЯЧЕЙКИ
+                    // Проверяем, что ячейка существует и содержит значение
+                    if (excelRange.Cells[i, j] != null &&
+                        ((Excel.Range)excelRange.Cells[i, j]).Value2 != null)
+                    {
+                        // ВЫВОД ДАННЫХ В КОНСОЛЬ
+                        Console.Write(((Excel.Range)excelRange.Cells[i, j]).Value2.ToString() + "\t");
+                    }
+                }
+            }
+
+            // ЗАВЕРШЕНИЕ РАБОТЫ С EXCEL
+            // Закрываем приложение Excel
+            excelApp.Quit();
+
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+
+            Console.ReadLine();
+        }
+    }
+}
