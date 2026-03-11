@@ -1,0 +1,30 @@
+using System;
+using System.Net;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        // 1. URL с открытыми данными (простой CSV-файл для примера)
+        string url = "https://people.sc.fsu.edu/~jburkardt/data/csv/hw_200.csv";
+
+        // 2. Путь для сохранения файла локально
+        string savePath = "data.csv";
+
+        // 3. Загружаем файл с помощью WebClient
+        WebClient client = new WebClient();
+        client.DownloadFile(url, savePath);
+        Console.WriteLine("✓ Файл загружен: " + savePath);
+        Console.WriteLine(new string('-', 50));
+
+        // 4. Выводим содержимое файла в консоль
+        string[] lines = File.ReadAllLines(savePath);
+        foreach (string line in lines)
+        {
+            Console.WriteLine(line);
+        }
+
+        Console.ReadKey();
+    }
+}
