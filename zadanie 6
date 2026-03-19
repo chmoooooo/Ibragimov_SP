@@ -1,0 +1,75 @@
+using System;
+using System.Threading;
+using ExcelDataReader;
+using System.IO;
+using System.Text;
+
+namespace privet
+{
+    class Program
+    {
+        static string filePath = @"C:\Users\23_ИП-291к\Desktop\primer.xlsx";
+
+        static void Main()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Console.OutputEncoding = Encoding.UTF8;
+
+            Console.WriteLine($"Главный поток: {Thread.CurrentThread.ManagedThreadId}\n");
+
+            // Создание потоков
+            var t1 = new Thread(() => ReadSheet(1)) { Name = "Поток 1" };
+            var t2 = new Thread(() => ReadSheet(2)) { Name = "Поток 2" };
+
+            // Запуск потоков
+            t1.Start();
+            Thread.Sleep(1000); // пауза между запусками
+            t2.Start();
+
+            // Ожидание завершения
+            t1.Join();
+            t2.Join();
+
+            Console.WriteLine("\nПрограмма завершена");
+        }
+
+        static void ReadSheet(int sheetNum)
+        {
+            Console.WriteLine($"{Thread.CurrentThread.Name} начал работу");
+
+            // Задержка для второго потока
+            if (sheetNum == 2) Thread.Sleep(2000);
+
+            try
+            {
+                using var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
+                using var reader = ExcelReaderFactory.CreateReader(stream);
+
+                // Переход к нужному листу
+                for (int i = 1; i < sheetNum; i++)
+                    reader.NextResult();
+
+                Console.WriteLine($"Лист {sheetNum}:");
+
+                // Чтение первых 10 строк
+                int row = 0;
+                while (reader.Read() && row++ < 10)
+                {
+                    for (int col = 0; col < reader.FieldCount; col++)
+                    {
+                        var val = reader.GetValue(col)?.ToString();
+                        if (!string.IsNullOrEmpty(val))
+                            Console.Write(val + "\t");
+                    }
+                    Console.WriteLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+
+            Console.WriteLine($"{Thread.CurrentThread.Name} завершен\n");
+        }
+    }
+}
