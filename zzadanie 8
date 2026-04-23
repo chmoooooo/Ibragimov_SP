@@ -1,0 +1,102 @@
+Server:
+using System;
+using System.IO.Pipes;
+
+namespace Server
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            byte[] a = new byte[10];
+            Random rnd = new Random();
+
+            // Заполняем массив случайными числами
+            Console.WriteLine("Массив создан:");
+            for (int i = 0; i < 10; i++)
+            {
+                a[i] = (byte)(rnd.Next() % 101);
+                Console.Write(a[i] + "\t");
+            }
+            Console.WriteLine();
+
+            // Создаём именованный канал
+            using (var s = new NamedPipeServerStream("888"))
+            {
+                Console.WriteLine("Ожидаем подключения клиента...");
+                s.WaitForConnection(); // Ждём клиента
+
+                // Отправляем массив клиенту
+                for (int i = 0; i < 10; i++)
+                    s.WriteByte(a[i]);
+
+                // Получаем отсортированный массив от клиента
+                for (int i = 0; i < 10; i++)
+                    a[i] = (byte)(s.ReadByte());
+
+                Console.WriteLine("Массив после сортировки:");
+                for (int i = 0; i < 10; i++)
+                    Console.Write(a[i] + "\t");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Сеанс сервера закончен");
+            Console.ReadLine();
+        }
+    }
+}
+
+
+
+
+Client:
+using System;
+using System.IO.Pipes;
+
+namespace Client
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            byte[] a = new byte[10];
+
+            using (var s = new NamedPipeClientStream("888"))
+            {
+                Console.WriteLine("Клиент подключается...");
+                s.Connect(); // Подключаемся к каналу сервера
+
+                // Получаем массив от сервера
+                for (int i = 0; i < 10; i++)
+                    a[i] = (byte)(s.ReadByte());
+
+                Console.WriteLine("Полученный массив:");
+                for (int i = 0; i < 10; i++)
+                    Console.Write(a[i] + "\t");
+                Console.WriteLine();
+
+                // Сортируем по убыванию
+                for (int i = 0; i < 9; i++)
+                    for (int j = i + 1; j < 10; j++)
+                        if (a[i] < a[j])
+                        {
+                            byte temp = a[i];
+                            a[i] = a[j];
+                            a[j] = temp;
+                        }
+
+                Console.WriteLine("Отсортированный массив (отправляем серверу):");
+                for (int i = 0; i < 10; i++)
+                    Console.Write(a[i] + "\t");
+                Console.WriteLine();
+
+                // Отправляем отсортированный массив обратно серверу
+                for (int i = 0; i < 10; i++)
+                    s.WriteByte(a[i]);
+            }
+
+            Console.WriteLine("Сеанс клиента закончен");
+            Console.ReadLine();
+        }
+    }
+}
